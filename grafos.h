@@ -2,6 +2,11 @@
 #define GRAFOS_H
 
 #include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+#define TRUE 1
+#define FALSE 0
 
 struct vertice{
     int id;
@@ -20,6 +25,18 @@ struct grafo{
     int numVertices;
 }typedef GRAFO;
 
+void imprimeAresta(ARESTA a);
 
+void imprimeVertice(VERTICE v);
+
+void imprimeGrafo(GRAFO g);
+
+int existeVertice(GRAFO *g, VERTICE *v);
+
+void insereAresta(GRAFO *g, VERTICE *origem, VERTICE *destino, ARESTA *a);
+
+void alocaVertices(GRAFO *g, int qtde);
+
+void insereVertice(GRAFO *g, VERTICE *v);
 
 #endif
