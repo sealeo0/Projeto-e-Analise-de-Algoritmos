@@ -2,6 +2,7 @@
 
 
 int main(){
-    lerArquivo("exemplo.txt");
+    GRAFO g;
+    g = lerArquivo("exemplo.txt");
     return 0;
 }

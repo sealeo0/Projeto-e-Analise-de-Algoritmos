@@ -43,6 +43,28 @@ void trim(char str[]){
     }
 }
 
+void imprimeAresta(ARESTA a){
+    printf("Peso Aresta: %d\n", a.peso);
+}
+
+void imprimeVertice(VERTICE v){
+    int i;
+    printf("Vertice Numero: %d\n", v.id);
+    printf("Tamanho do vetor de Arestas: %d\n", v.numArestas);
+    for(i = 0; i < v.numArestas; i++){
+        imprimeAresta(v.vetArestas[i]);
+    }
+}
+
+void imprimeGrafo(GRAFO g){
+    int i;
+    printf("Quantidade de Vertices: %d\n", g.numVertices);
+    printf("Orientado: %d", g.orientado);
+    for(i = 0; i < g.numVertices; i++){
+        imprimeVertice(g.vertices[i]);
+    }
+}
+
 int verificaOrientado(FILE *f){
     char str[20];
     fscanf(f, " %[^\n]\n", str);
@@ -80,7 +102,14 @@ void insereAresta(GRAFO *g, VERTICE *origem, VERTICE *destino, ARESTA *a){
     origem->vetArestas = (ARESTA* ) realloc(origem->numArestas + 1, sizeof(ARESTA));
     (origem->vetArestas + origem->numArestas)->peso = a->peso;  
     (origem->vetArestas + origem->numArestas)->verticeDestino = destino;  
+    origem->numArestas++;
 
+    if(!g->orientado){
+        destino->vetArestas = (ARESTA* ) realloc(destino->numArestas + 1, sizeof(ARESTA));
+        (destino->vetArestas + destino->numArestas)->peso = a->peso;  
+        (destino->vetArestas + destino->numArestas)->verticeDestino = origem;
+        destino->numArestas++;  
+    }
 
 }
 
@@ -89,9 +118,9 @@ void insereVertice(GRAFO *g, VERTICE *v){
     VERTICE *verticeInserido = (g->vertices + g->numVertices);
 
 
-    if(enableDebug){
-        printf("Inserido vertice com id: %d\n", v->id);    
-    }
+//    if(enableDebug){
+   //     printf("Inserido vertice com id: %d\n", v->id);    
+    //}
     
     verticeInserido->id = v->id;
     verticeInserido->numArestas = 0;
@@ -103,11 +132,12 @@ void insereVertice(GRAFO *g, VERTICE *v){
 void lerLinhas(FILE *f, GRAFO *g){
     char str[15];
     VERTICE v1, v2;
-    int peso;
+    ARESTA a;
     while(!verificaFinalArquivo(f)){
-        fscanf(f, "(%d,%d):%d", &(v1.id), &(v2.id), &peso);
+        fscanf(f, "(%d,%d):%d", &(v1.id), &(v2.id), &(a.peso));
+        printf("%d %d %d", v1.id, v2.id, a.peso);
 
-        
+        insereAresta(g, &v1, &v2, &a);
     }
 
 }
@@ -124,8 +154,11 @@ GRAFO lerArquivo(char nomeArq[]){
 
     g.orientado = verificaOrientado(f);
     g.numVertices = 0;
-    printf("%d", g.orientado);
+    printf("%d\n", g.orientado);
 
+    lerLinhas(f, &g);
 
+    imprimeGrafo(g);
 
+    return g;
 }
