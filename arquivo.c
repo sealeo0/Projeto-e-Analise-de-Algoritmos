@@ -59,9 +59,10 @@ void imprimeVertice(VERTICE v){
 void imprimeGrafo(GRAFO g){
     int i;
     printf("Quantidade de Vertices: %d\n", g.numVertices);
-    printf("Orientado: %d", g.orientado);
+    printf("Orientado: %d\n\n", g.orientado);
     for(i = 0; i < g.numVertices; i++){
         imprimeVertice(g.vertices[i]);
+        printf("\n");
     }
 }
 
@@ -91,13 +92,25 @@ int existeVertice(GRAFO *g, VERTICE *v){
     return FALSE;
 }
 
-void insereAresta(GRAFO *g, VERTICE *origem, VERTICE *destino, ARESTA *a){
-    if(!existeVertice(g, origem)){
-        insereVertice(g, origem);
+VERTICE* procuraVertice(GRAFO *g, VERTICE *v){
+    int i;
+    for(i = 0; i < g->numVertices; i++){
+        if(v->id == g->vertices[i].id){
+            return g->vertices+i; //retorna o elemento na posicao i
+        }
     }
-    if(!existeVertice(g, destino)){
-        insereVertice(g, destino);
+}
+
+void insereAresta(GRAFO *g, VERTICE *v1, VERTICE *v2, ARESTA *a){
+    if(!existeVertice(g, v1)){
+        insereVertice(g, v1);
     }
+    if(!existeVertice(g, v2)){
+        insereVertice(g, v2);
+    }
+
+    VERTICE *origem = procuraVertice(g, v1);
+    VERTICE *destino = procuraVertice(g, v2);
 
     if(origem->numArestas){
         origem->vetArestas = (ARESTA* ) realloc(origem->vetArestas, (origem->numArestas + 1) * sizeof(ARESTA));        
@@ -126,7 +139,6 @@ void insereAresta(GRAFO *g, VERTICE *origem, VERTICE *destino, ARESTA *a){
             destino->numArestas++;            
         }
     }
-    printf("PIROCA\n");
 }
 
 void insereVertice(GRAFO *g, VERTICE *v){
@@ -137,7 +149,7 @@ void insereVertice(GRAFO *g, VERTICE *v){
         g->vertices = (VERTICE* ) malloc((g->numVertices + 1) * sizeof(VERTICE));
     }
     VERTICE *verticeInserido = (g->vertices + g->numVertices);
-    g->numVertices += 1;
+    
 
 
 //    if(enableDebug){
@@ -147,20 +159,21 @@ void insereVertice(GRAFO *g, VERTICE *v){
     verticeInserido->id = v->id;
     verticeInserido->numArestas = 0;
     verticeInserido->vetArestas = NULL;
-    
+    g->numVertices += 1;
 }
 
 void lerLinhas(FILE *f, GRAFO *g){
     char str[15];
     VERTICE v1, v2;
+    v1.numArestas = 0;
+    v2.numArestas = 0;
     ARESTA a;
     while(!verificaFinalArquivo(f)){
-        fscanf(f, "(%d,%d):%d", &(v1.id), &(v2.id), &(a.peso));
-        printf("%d %d %d", v1.id, v2.id, a.peso);
+        fscanf(f, "(%d,%d):%d\n", &(v1.id), &(v2.id), &(a.peso));
+        printf("%d %d %d\n", v1.id, v2.id, a.peso);
 
         insereAresta(g, &v1, &v2, &a);
     }
-
 }
 
 GRAFO lerArquivo(char nomeArq[]){
@@ -175,7 +188,7 @@ GRAFO lerArquivo(char nomeArq[]){
 
     g.orientado = verificaOrientado(f);
     g.numVertices = 0;
-    printf("%d\n", g.orientado);
+
 
     lerLinhas(f, &g);
 
