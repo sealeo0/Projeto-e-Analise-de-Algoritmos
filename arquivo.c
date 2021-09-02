@@ -100,7 +100,7 @@ void insereAresta(GRAFO *g, VERTICE *origem, VERTICE *destino, ARESTA *a){
     }
 
     if(origem->numArestas){
-        origem->vetArestas = (ARESTA* ) realloc(origem->numArestas + 1, sizeof(ARESTA));
+        origem->vetArestas = (ARESTA* ) realloc(origem->vetArestas, (origem->numArestas + 1) * sizeof(ARESTA));        
         (origem->vetArestas + origem->numArestas)->peso = a->peso;  
         (origem->vetArestas + origem->numArestas)->verticeDestino = destino;  
         origem->numArestas++;
@@ -114,7 +114,7 @@ void insereAresta(GRAFO *g, VERTICE *origem, VERTICE *destino, ARESTA *a){
 
     if(!g->orientado){
         if(destino->numArestas){
-            destino->vetArestas = (ARESTA* ) realloc(destino->numArestas + 1, sizeof(ARESTA));
+            destino->vetArestas = (ARESTA* ) realloc(destino->vetArestas, (destino->numArestas + 1) * sizeof(ARESTA));
             (destino->vetArestas + destino->numArestas)->peso = a->peso;  
             (destino->vetArestas + destino->numArestas)->verticeDestino = origem;
             destino->numArestas++;  
@@ -131,12 +131,13 @@ void insereAresta(GRAFO *g, VERTICE *origem, VERTICE *destino, ARESTA *a){
 
 void insereVertice(GRAFO *g, VERTICE *v){
     if(g->numVertices){ //GAMBIARRA 
-        g->vertices = (VERTICE* ) realloc(g->numVertices + 1, sizeof(VERTICE));
+        g->vertices = (VERTICE* ) realloc(g->vertices, (g->numVertices + 1) * sizeof(VERTICE));
     }
     else{
         g->vertices = (VERTICE* ) malloc((g->numVertices + 1) * sizeof(VERTICE));
     }
     VERTICE *verticeInserido = (g->vertices + g->numVertices);
+    g->numVertices += 1;
 
 
 //    if(enableDebug){
