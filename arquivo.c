@@ -99,22 +99,43 @@ void insereAresta(GRAFO *g, VERTICE *origem, VERTICE *destino, ARESTA *a){
         insereVertice(g, destino);
     }
 
-    origem->vetArestas = (ARESTA* ) realloc(origem->numArestas + 1, sizeof(ARESTA));
-    (origem->vetArestas + origem->numArestas)->peso = a->peso;  
-    (origem->vetArestas + origem->numArestas)->verticeDestino = destino;  
-    origem->numArestas++;
-
-    if(!g->orientado){
-        destino->vetArestas = (ARESTA* ) realloc(destino->numArestas + 1, sizeof(ARESTA));
-        (destino->vetArestas + destino->numArestas)->peso = a->peso;  
-        (destino->vetArestas + destino->numArestas)->verticeDestino = origem;
-        destino->numArestas++;  
+    if(origem->numArestas){
+        origem->vetArestas = (ARESTA* ) realloc(origem->numArestas + 1, sizeof(ARESTA));
+        (origem->vetArestas + origem->numArestas)->peso = a->peso;  
+        (origem->vetArestas + origem->numArestas)->verticeDestino = destino;  
+        origem->numArestas++;
+    }
+    else{
+        origem->vetArestas = (ARESTA* ) malloc((origem->numArestas + 1) * sizeof(ARESTA));
+        (origem->vetArestas + origem->numArestas)->peso = a->peso;  
+        (origem->vetArestas + origem->numArestas)->verticeDestino = destino;  
+        origem->numArestas++;        
     }
 
+    if(!g->orientado){
+        if(destino->numArestas){
+            destino->vetArestas = (ARESTA* ) realloc(destino->numArestas + 1, sizeof(ARESTA));
+            (destino->vetArestas + destino->numArestas)->peso = a->peso;  
+            (destino->vetArestas + destino->numArestas)->verticeDestino = origem;
+            destino->numArestas++;  
+        }
+        else{
+            destino->vetArestas = (ARESTA* ) malloc((destino->numArestas + 1) * sizeof(ARESTA));
+            (destino->vetArestas + destino->numArestas)->peso = a->peso;  
+            (destino->vetArestas + destino->numArestas)->verticeDestino = origem;
+            destino->numArestas++;            
+        }
+    }
+    printf("PIROCA\n");
 }
 
 void insereVertice(GRAFO *g, VERTICE *v){
-    g->vertices = (VERTICE* ) realloc(g->numVertices + 1, sizeof(VERTICE));
+    if(g->numVertices){ //GAMBIARRA 
+        g->vertices = (VERTICE* ) realloc(g->numVertices + 1, sizeof(VERTICE));
+    }
+    else{
+        g->vertices = (VERTICE* ) malloc((g->numVertices + 1) * sizeof(VERTICE));
+    }
     VERTICE *verticeInserido = (g->vertices + g->numVertices);
 
 
@@ -125,7 +146,6 @@ void insereVertice(GRAFO *g, VERTICE *v){
     verticeInserido->id = v->id;
     verticeInserido->numArestas = 0;
     verticeInserido->vetArestas = NULL;
-    
     
 }
 
@@ -159,6 +179,7 @@ GRAFO lerArquivo(char nomeArq[]){
     lerLinhas(f, &g);
 
     imprimeGrafo(g);
+
 
     return g;
 }
