@@ -3,6 +3,6 @@
 
 #include "arquivo.h"
 
-void menuPrincipal();
+int menuInicial();
 
 #endif
