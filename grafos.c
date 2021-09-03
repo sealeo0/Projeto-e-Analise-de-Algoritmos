@@ -81,4 +81,3 @@ void insereVertice(GRAFO *g, VERTICE *v){
     verticeInserido->vetArestas = NULL;
     g->numVertices += 1;
 }
-
