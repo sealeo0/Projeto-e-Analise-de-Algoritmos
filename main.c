@@ -1,8 +1,10 @@
+#include "algoritmos.h"
 #include "view.h"
 
 
 int main(int argc, char **argv){
     GRAFO g;
+    VERTICE *v;
 
     if(argc != 2){
         printf("Quantidade de argumentos invalida.\n");
@@ -10,6 +12,9 @@ int main(int argc, char **argv){
     }
 
     g = lerArquivo(argv[1]);
+
+    ordenaArestasVerticesGrafo(&g);
+
     imprimeGrafo(g);
 
     int resposta;
@@ -20,10 +25,11 @@ int main(int argc, char **argv){
     while(resposta){
         switch(resposta){
             case 1:
-                //buscaProfundidade
+                buscaProfundidade(&g, 3);
                 break;
             case 2:
-                //buscaLargura
+                v = retornaVertice(&g, 3);
+                buscaLargura(&g, v);
                 break;
             case 3:
                 //bellmanFord

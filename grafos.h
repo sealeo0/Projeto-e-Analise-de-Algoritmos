@@ -47,4 +47,10 @@ void deslocaDireita(GRAFO *g, int pos);
 
 void insereVertice(GRAFO *g, VERTICE *v);
 
+void ordenaArestasVertice(VERTICE *v);
+
+void ordenaArestasVerticesGrafo(GRAFO *g);
+
+VERTICE* retornaVertice(GRAFO *g, int id);
+
 #endif

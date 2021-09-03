@@ -1,7 +1,7 @@
 #ifndef VIEW_H
 #define VIEW_H
 
-#include "arquivo.h"
+#include <stdio.h>
 
 int menuInicial();
 

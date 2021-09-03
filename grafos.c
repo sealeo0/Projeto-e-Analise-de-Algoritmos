@@ -17,7 +17,7 @@ void imprimeVertice(VERTICE v){
 void imprimeGrafo(GRAFO g){
     int i;
     printf("Quantidade de Vertices: %d\n", g.numVertices);
-//    printf("Orientado: %d\n\n", g.orientado);
+    printf("Orientado: %d\n\n", g.orientado);
     for(i = 0; i < g.numVertices; i++){
         imprimeVertice(g.vertices[i]);
         printf("\n");
@@ -111,7 +111,7 @@ void deslocaDireita(GRAFO *g, int pos){
 
 void insereVertice(GRAFO *g, VERTICE *v){
     int pos = encontraPosicaoInsercao(g, v);
-    printf("\n\nENCONTROU A PIROCA NA POSICAO: %d E O ID EH %d\n", pos, v->id);
+
     deslocaDireita(g, pos);
 
     VERTICE *verticeInserido = (g->vertices + pos);
@@ -122,5 +122,34 @@ void insereVertice(GRAFO *g, VERTICE *v){
 
 }
 
+void ordenaArestasVertice(VERTICE *v){
+    int i, j;
+    ARESTA temp;
+    for(i = v->numArestas - 1; i >= 0; i--){
+        for(j = 1; j <= i; j++){
+            if(v->vetArestas[j-1].verticeDestino->id > v->vetArestas[j].verticeDestino->id) {
+                temp = v->vetArestas[j-1];
+                v->vetArestas[j-1] = v->vetArestas[j];
+                v->vetArestas[j] = temp;
+            }
+        }
+    }
+}
 
+void ordenaArestasVerticesGrafo(GRAFO *g){
+    int i;
+    for(i = 0; i < g->numVertices; i++){
+        ordenaArestasVertice(g->vertices + i);
+    }    
+}
+
+VERTICE* retornaVertice(GRAFO *g, int id){
+    int i;
+    for(i = 0; i < g->numVertices; i++){
+        if(g->vertices[i].id == id){
+            return g->vertices+i;
+        }
+    }
+    return NULL;
+}
 
