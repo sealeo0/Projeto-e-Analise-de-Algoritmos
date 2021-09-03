@@ -8,8 +8,6 @@
 #define PRETO 30
 #define NIL -1
 
-void buscaProfundidadeVisita(VERTICE *u);
-
 void buscaProfundidade(GRAFO *g, int id);
 
 #endif

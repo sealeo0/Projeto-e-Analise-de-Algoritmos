@@ -2,6 +2,7 @@
 
 void imprimeAresta(ARESTA a){
     printf("Peso Aresta: %d\n", a.peso);
+    printf("Destino da aresta: %d\n", a.verticeDestino->id);
 }
 
 void imprimeVertice(VERTICE v){
@@ -16,7 +17,7 @@ void imprimeVertice(VERTICE v){
 void imprimeGrafo(GRAFO g){
     int i;
     printf("Quantidade de Vertices: %d\n", g.numVertices);
-    printf("Orientado: %d\n\n", g.orientado);
+//    printf("Orientado: %d\n\n", g.orientado);
     for(i = 0; i < g.numVertices; i++){
         imprimeVertice(g.vertices[i]);
         printf("\n");
@@ -73,11 +74,53 @@ void alocaVertices(GRAFO *g, int qtde){
     printf("Memoria alocada.\n");
 }
 
-void insereVertice(GRAFO *g, VERTICE *v){
-    VERTICE *verticeInserido = (g->vertices + g->numVertices);
-
-    verticeInserido->id = v->id;
-    verticeInserido->numArestas = 0;
-    verticeInserido->vetArestas = NULL;
-    g->numVertices += 1;
+int encontraPosicaoInsercao(GRAFO *g, VERTICE *v){
+    int i; 
+    for(i = 0; i < g->numVertices; i++){
+        if(g->vertices[i].id > v->id){
+            return i;
+        }
+    }
+    return g->numVertices;
 }
+
+void copiaVertice(VERTICE *destino, VERTICE *origem){
+    destino->id = origem->id;
+    destino->numArestas = origem->numArestas;
+    destino->vetArestas = origem->vetArestas;
+}
+
+void atualizaArestas(GRAFO *g, VERTICE *v){
+    int i, j;
+    for(i = 0; i < g->numVertices; i++){
+        for(j = 0; j < g->vertices[i].numArestas; j++){
+            if(g->vertices[i].vetArestas[j].verticeDestino->id == v->id){
+                g->vertices[i].vetArestas[j].verticeDestino = v + 1;//DESLOCANDO O ENDERECO PARA A POSICAO A DIREITA
+            }
+        }
+    }
+}
+
+void deslocaDireita(GRAFO *g, int pos){
+    int i;
+    for(i = g->numVertices; i > pos; i--){
+        atualizaArestas(g, (g->vertices + i - 1));
+        copiaVertice(&g->vertices[i], &g->vertices[i-1]);
+    }
+}
+
+void insereVertice(GRAFO *g, VERTICE *v){
+    int pos = encontraPosicaoInsercao(g, v);
+    printf("\n\nENCONTROU A PIROCA NA POSICAO: %d E O ID EH %d\n", pos, v->id);
+    deslocaDireita(g, pos);
+
+    VERTICE *verticeInserido = (g->vertices + pos);
+    
+    copiaVertice(verticeInserido, v);
+
+    g->numVertices += 1;
+
+}
+
+
+

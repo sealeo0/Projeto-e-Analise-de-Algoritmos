@@ -67,8 +67,12 @@ int verificaTotalVertices(FILE *f){
 
 void lerArestas(FILE *f, GRAFO *g){
     VERTICE v1, v2;
+    
     v1.numArestas = 0;
+    v1.vetArestas = NULL;
     v2.numArestas = 0;
+    v2.vetArestas = NULL;
+
     ARESTA a;
     while(!verificaFinalArquivo(f)){
         fscanf(f, "(%d,%d):%d\n", &(v1.id), &(v2.id), &(a.peso));

@@ -37,6 +37,14 @@ void insereAresta(GRAFO *g, VERTICE *origem, VERTICE *destino, ARESTA *a);
 
 void alocaVertices(GRAFO *g, int qtde);
 
+int encontraPosicaoInsercao(GRAFO *g, VERTICE *v);
+
+void copiaVertice(VERTICE *destino, VERTICE *origem);
+
+void atualizaArestas(GRAFO *g, VERTICE *v);
+
+void deslocaDireita(GRAFO *g, int pos);
+
 void insereVertice(GRAFO *g, VERTICE *v);
 
 #endif
